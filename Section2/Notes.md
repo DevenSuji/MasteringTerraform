@@ -1,6 +1,6 @@
 # ***Terraform***
 
-### Different ways of assigning variables in Terraform and their precedence.
+### Ways to define variables.
 
 ***Variables in terraform can be assigned in multiple ways. Some of these include***
 * ***Environment Variables:*** This method involves defining the variable and it's values as the environment variable.
