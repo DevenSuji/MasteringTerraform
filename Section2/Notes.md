@@ -1,6 +1,6 @@
 # ***Terraform***
 
-## Progress: Start from video 23
+## ***Progress: Start from video 23***
 
 ### Ways to define variables.
 
