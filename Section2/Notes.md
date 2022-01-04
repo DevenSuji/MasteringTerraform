@@ -1,7 +1,14 @@
 # Different ways of assigning variables in Terraform and their precedence.
 
-Variables in terraform can be assigned in multiple ways. Some of these include
-* ***Environment Variables:***
+***Variables in terraform can be assigned in multiple ways. Some of these include***
+* ***Environment Variables:*** This method involves defining the variable and it's values as the environment variable.
+```terraform
+# For windows
+setx TF_VARS_instancetype m5.large  
+  
+# For Mac and Linux
+export TF_VARS_instancetype="m5.large"
+```
 * ***Command Line Flags:*** This method involves supplying the value of the variables in the command line. See the below example.
 ```terraform
 terraform plan -var="instancetype=t2.small" 
