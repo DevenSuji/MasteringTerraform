@@ -2,7 +2,11 @@
 
 Variables in terraform can be assigned in multiple ways. Some of these include
 * Environment Variables.
-* Command Line Flags
+* Command Line Flags : This method involves supplying the value of the variables in the command line. See the below example.
+```terraform
+terraform plan -var="instancetype=t2.small" 
+terraform apply -var="instancetype=t2.small" 
+```
 * From a file.
 * Variables Defaults : This method requires us to create a file by the name variable.tf and define the data in the file. See the example below.
 ```terraform
