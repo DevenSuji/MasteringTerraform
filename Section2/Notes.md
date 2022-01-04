@@ -1,5 +1,7 @@
 # ***Terraform***
 
+## Progress: Start from video 23
+
 ### Ways to define variables.
 
 ***Variables in terraform can be assigned in multiple ways. Some of these include***
