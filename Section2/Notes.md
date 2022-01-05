@@ -36,3 +36,42 @@ variable "image_id" {
     type = string
 }
 ```
+
+### ***Conditional Expression (If_Else Block)***
+
+A conditional expression used the value of a boolean expression to select one of the two values.  
+Syntax of Conditional Expression:
+```terraform
+contition ? true_value : false_value
+```
+The above condition says that if the condition is true then the result is true_value and if the condition is false then the result is false_value.
+See below on how the actual code looks like and also ensure that a file by the name terraform.tfvars is created in the same directory with the value as istrue = true/false.
+```terraform
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 3.0"
+    }
+  }
+}
+
+provider "aws" {
+  region = "ap-south-1"
+}
+
+variable "istest" {}
+
+resource "aws_instance" "dev" {
+  ami           = "ami-052cef05d01020f1d"
+  instance_type = "t2.micro"
+  count = var.istest == true ? 3 : 0
+}
+
+
+resource "aws_instance" "prod" {
+  ami           = "ami-052cef05d01020f1d"
+  instance_type = "t2.large"
+  count = var.istest == false ? 5 : 0
+}
+```
