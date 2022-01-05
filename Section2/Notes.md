@@ -2,7 +2,7 @@
 
 ## ***Progress: Start from video 23***
 
-### Ways to define variables.
+### ***Ways to define variables.***
 
 ***Variables in terraform can be assigned in multiple ways. Some of these include***
 * ***Environment Variables:*** This method involves defining the variable and it's values as the environment variable.
@@ -26,5 +26,13 @@ instancetype = "t2.large"
 ```terraform
 variable "instancetype" {
     default = "t2.micro"
+}
+```
+### ***Type Constraints***
+
+The type argument in the variable block allows you to restrict the type of value that will be accepted as the value for the variable. If no type constraint is set that value of any type is accepted.
+```terraform
+variable "image_id" {
+    type = string
 }
 ```
