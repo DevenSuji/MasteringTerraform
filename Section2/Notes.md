@@ -134,3 +134,11 @@ Documentation: https://www.terraform.io/language/functions
 a = [1, 2, 3, 4]
 print(a)
 ```
+
+### Learning Bash
+
+The below command is used to lookup the ip address of the machine.
+
+```bash
+ip addr
+```
