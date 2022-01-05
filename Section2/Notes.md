@@ -118,3 +118,19 @@ resource "aws_ebs_volume" "db_ebs" {
   tags = local.common_tags
 }
 ```
+### ***Terraform Functions***
+
+The Terraform language includes a number of built-in functions that we can use to transform and combine values.
+The general syntax for the function is the name of the function followed by command seperated arguments in parenthesis.
+```terraform
+max(2, 3, 4)
+```
+Terraform language does not support user defined functions. Hence only the built in functions are at our displosal.
+
+Documentation: https://www.terraform.io/language/functions
+
+
+```python
+a = [1, 2, 3, 4]
+print(a)
+```
