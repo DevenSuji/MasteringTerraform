@@ -166,9 +166,17 @@ The logs can also be saved to a file using the below command.
 export TF_LOG_PATH=/tmp/terraform-crash.log
 ```
 
-### ***<ins>Formatting in Terraform</ins>***
+### ***<ins>Terraform Format</ins>***
 
 To format the code in the terraform configuration file we can use the below command. Terraform will format the code in a readable format.
 ```bash
 terraform fmt
+```
+
+### ***<ins>Terraform Validate</ins>***
+
+This command validates if the configuration is syntactically valid.
+If will various aspects including unsupported arguments, udeclared variables and others.
+```bash
+terraform validate
 ```
