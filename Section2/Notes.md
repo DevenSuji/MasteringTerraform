@@ -1,8 +1,8 @@
-# ***Terraform***
+# ***<ins>Terraform</ins>***
 
-## ***Progress: Start from video 29***
+## ***<ins>Progress: Start from video 29</ins>***
 
-### ***Ways to define variables.***
+### ***<ins>Ways to define variables.</ins>***
 
 ***Variables in terraform can be assigned in multiple ways. Some of these include***
 * ***Environment Variables:*** This method involves defining the variable and it's values as the environment variable.
@@ -28,7 +28,7 @@ variable "instancetype" {
     default = "t2.micro"
 }
 ```
-### ***Type Constraints***
+### ***<ins>Type Constraints</ins>***
 
 The type argument in the variable block allows you to restrict the type of value that will be accepted as the value for the variable. If no type constraint is set that value of any type is accepted.
 ```terraform
@@ -37,7 +37,7 @@ variable "image_id" {
 }
 ```
 
-### ***Conditional Expression (If_Else Block)***
+### ***<ins>Conditional Expression (If_Else Block)</ins>***
 
 A conditional expression used the value of a boolean expression to select one of the two values.  
 Syntax of Conditional Expression:
@@ -76,7 +76,7 @@ resource "aws_instance" "prod" {
 }
 ```
 
-### ***Local Values***
+### ***<ins>Local Values</ins>***
 If there is a command value that needs to be applied to the every configuraiton iteam then these values can be defined under the local resource type. See the example below.
 ```terraform
 terraform {
@@ -118,7 +118,7 @@ resource "aws_ebs_volume" "db_ebs" {
   tags = local.common_tags
 }
 ```
-### ***Terraform Functions***
+### ***<ins>Terraform Functions</ins>***
 
 The Terraform language includes a number of built-in functions that we can use to transform and combine values.
 The general syntax for the function is the name of the function followed by command seperated arguments in parenthesis.
