@@ -133,4 +133,25 @@ Documentation: https://www.terraform.io/language/functions
 
 ### <ins>Data Sources</ins>
 
+There are a lot of data that we've hard coded in the configuration file. But this is not the right way to write the configuration files.
+Instead I'd want to query and find out the lastest data dynamically and use the same in the configuration file. One such data that we've been hardcoding is the ami id. 
+Now the data block shown below will query aws for the latest ami id for the operation system that I want to deploy an EC2 instance with and insert the same data to the resource block. See the example below.
+```terraform
+data "aws_ami" "app_ami" {
+    most_recent = true
+    owners      = ["amazon"]
+
+    filter {
+        name   = "name"
+        values = ["amzn2-ami-hvm-*"]
+    }
+}
+
+resource "aws_instance" "instance-1" {
+  ami = data.aws_ami.app_ami.id
+  instance_type = "t2.micro"
+}
+```
+
+
 
