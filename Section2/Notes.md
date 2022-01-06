@@ -152,6 +152,19 @@ resource "aws_instance" "instance-1" {
   instance_type = "t2.micro"
 }
 ```
+### <ins>Debugging in Terraform</ins>
+
+Terraform has detailed logs which can be enabled by setting the TF_LOG environment variable to any value.
+
+We can set the TF_LOG to one of the log levels TRACE, DEBUG, INFO, WARN and ERROR to change the verbosity of the logs.
+See below on how to change the log level in a Linux Box.
+```bash
+export TF_LOG=TRACE
+```
+The logs can also be saved to a file using the below command.
+```bash
+export TF_LOG_PATH=/tmp/terraform-crash.log
+```
 
 
 
