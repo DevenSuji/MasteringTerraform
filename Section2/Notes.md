@@ -130,15 +130,7 @@ Terraform language does not support user defined functions. Hence only the built
 Documentation: https://www.terraform.io/language/functions
 
 
-```python
-a = [1, 2, 3, 4]
-print(a)
-```
 
-### Learning Bash
+### <ins>Data Sources</ins>
 
-The below command is used to lookup the ip address of the machine.
 
-```bash
-ip addr
-```
