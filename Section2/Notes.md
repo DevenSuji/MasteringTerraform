@@ -8,10 +8,10 @@ By default the provider's code will be downloaded into .terraform folder.
 It is always advisable to add .terraform to gitignore.
 
 ## ***<ins>terraform plan</ins>***
-This command will let us see what terraform will do before actually making changes.
-Anylines with (+) will be created.
-Anylines with (-) will be deleted.
-Anylines with (~) will be modified in place. 
+This command will let us see what terraform will do before actually making changes.  
+Anylines with (+) will be created.  
+Anylines with (-) will be deleted.  
+Anylines with (~) will be modified in place.  
 
 ### ***<ins>Ways to define variables.</ins>***
 
