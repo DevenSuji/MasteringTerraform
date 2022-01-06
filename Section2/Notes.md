@@ -1,6 +1,6 @@
 # ***<ins>Terraform</ins>***
 
-## ***<ins>Progress: Start from video 29</ins>***
+## ***<ins>Progress: Start from video 34</ins>***
 
 ### ***<ins>Ways to define variables.</ins>***
 
@@ -180,3 +180,5 @@ If will various aspects including unsupported arguments, udeclared variables and
 ```bash
 terraform validate
 ```
+### ***<ins>Load Order and Semantics</ins>***
+Terraform generally loads all the configuration file within the directory specified in an aplhabetical order. The files loaded must end in either .tf or .tf.json to specify the format in use.
