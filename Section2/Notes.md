@@ -131,7 +131,7 @@ Documentation: https://www.terraform.io/language/functions
 
 
 
-### <ins>Data Sources</ins>
+### ***<ins>Data Sources</ins>***
 
 There are a lot of data that we've hard coded in the configuration file. But this is not the right way to write the configuration files.
 Instead I'd want to query and find out the lastest data dynamically and use the same in the configuration file. One such data that we've been hardcoding is the ami id. 
@@ -152,7 +152,7 @@ resource "aws_instance" "instance-1" {
   instance_type = "t2.micro"
 }
 ```
-### <ins>Debugging in Terraform</ins>
+### ***<ins>Debugging in Terraform</ins>***
 
 Terraform has detailed logs which can be enabled by setting the TF_LOG environment variable to any value.
 
@@ -166,5 +166,9 @@ The logs can also be saved to a file using the below command.
 export TF_LOG_PATH=/tmp/terraform-crash.log
 ```
 
+### ***<ins>Formatting in Terraform</ins>***
 
-
+To format the code in the terraform configuration file we can use the below command. Terraform will format the code in a readable format.
+```bash
+terraform fmt
+```
