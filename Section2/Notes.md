@@ -244,3 +244,16 @@ resource "aws_security_group" "dynamicsg" {
   }
 }
 ```
+### ***<ins>Terraform Taint</ins>***
+Consider this scenario where you have created resources via Terraform and after the resource was provisioned users have made a lot of manual changes bo to the server and inside the server.  
+  
+There are two ways to deal with this issue:
+* We can either import the change to the Terraform.
+* We can delete and recreate the resource.
+
+The ***terraform taint*** command manually marks a terraform managed resource as tainted, forcing it to be destroyed and recreated on the next apply.
+
+***Important Notes About Taint***
+* This command will not modify the infrastructure, but does modify the state file in order to mark a resource as tainted.
+* Once a resource is marked as tainted, the next plan will show that the resource will be destroyed and recreated and the next apply will implement the change.
+* Note that tainting a resource for recreation may affect resources that depend on the newly tainted resource. For e.g. If there is a dns entry that points to the ip of the resource then we need to keep a note of modifying the dns entry using terraform as well.
