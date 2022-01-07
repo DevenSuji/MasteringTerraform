@@ -245,6 +245,7 @@ resource "aws_security_group" "dynamicsg" {
 }
 ```
 ### ***<ins>Terraform Taint</ins>***
+
 Consider this scenario where you have created resources via Terraform and after the resource was provisioned users have made a lot of manual changes to the server and inside the server.  
   
 There are two ways to deal with this issue:
@@ -260,3 +261,19 @@ The ***terraform taint*** command manually marks a terraform managed resource as
 * This command will not modify the infrastructure, but does modify the state file in order to mark a resource as tainted.
 * Once a resource is marked as tainted, the next plan will show that the resource will be destroyed and recreated and the next apply will implement the change.
 * Note that tainting a resource for recreation may affect resources that depend on the newly tainted resource. For e.g. If there is a dns entry that points to the ip of the resource then we need to keep a note of modifying the dns entry using terraform as well.
+
+### ***<ins>Splat Expression</ins>***
+
+Splat Expression allows us to get a list of all the attributes.
+
+```terraform
+resource "aws_iam_user" "lb" {
+  name = "iamuser.${count.index}"
+  count = 3
+  path = "/system/"
+}
+
+output "arns" {
+  value = aws_iam_user.lb[*].arn # The * here inside the square brackets is called splatting. LOL
+}
+```
