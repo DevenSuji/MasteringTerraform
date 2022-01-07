@@ -193,3 +193,54 @@ terraform validate
 ```
 ### ***<ins>Load Order and Semantics</ins>***
 Terraform generally loads all the configuration file within the directory specified in an aplhabetical order. The files loaded must end in either .tf or .tf.json to specify the format in use.
+
+### ***<ins>Dynamic Blocks/ins>***
+
+Dynamic blocks are used in places where we have huge number of repeated blocks, however the value of the attributes are different. It just like a function in programming language to which we can supply different values. If we do not use the Dynamic Blocks then our code will be too lengthy.
+
+```terraform
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 3.0"
+    }
+  }
+}
+
+provider "aws" {
+  region = "ap-south-1"
+}
+
+variable "sg_ports" {
+  type        = list(number)
+  description = "List of ingress ports to use for service groups"
+  default     = [8200, 8201, 8300, 9200, 9500]
+}
+
+resource "aws_security_group" "dynamicsg" {
+  name        = "dynamic-sg"
+  description = "Ingress for vault"
+
+  dynamic "ingress" {
+    for_each = var.sg_ports
+    iterator = port
+    content {
+      from_port   = port.value
+      to_port     = port.value
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  }
+
+  dynamic "egress" {
+    for_each = var.sg_ports
+    content {
+      from_port   = egress.value
+      to_port     = egress.value
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  }
+}
+```
