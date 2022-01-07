@@ -245,11 +245,14 @@ resource "aws_security_group" "dynamicsg" {
 }
 ```
 ### ***<ins>Terraform Taint</ins>***
-Consider this scenario where you have created resources via Terraform and after the resource was provisioned users have made a lot of manual changes bo to the server and inside the server.  
+Consider this scenario where you have created resources via Terraform and after the resource was provisioned users have made a lot of manual changes to the server and inside the server.  
   
 There are two ways to deal with this issue:
 * We can either import the change to the Terraform.
 * We can delete and recreate the resource.
+```bash
+terraform taint aws_instance.instance-1
+```
 
 The ***terraform taint*** command manually marks a terraform managed resource as tainted, forcing it to be destroyed and recreated on the next apply.
 
