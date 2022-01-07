@@ -194,7 +194,7 @@ terraform validate
 ### ***<ins>Load Order and Semantics</ins>***
 Terraform generally loads all the configuration file within the directory specified in an aplhabetical order. The files loaded must end in either .tf or .tf.json to specify the format in use.
 
-### ***<ins>Dynamic Blocks/ins>***
+### ***<ins>Dynamic Blocks</ins>***
 
 Dynamic blocks are used in places where we have huge number of repeated blocks, however the value of the attributes are different. It just like a function in programming language to which we can supply different values. If we do not use the Dynamic Blocks then our code will be too lengthy.
 
