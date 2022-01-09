@@ -1,6 +1,6 @@
 # ***<ins>Terraform</ins>***
 
-## ***<ins>Progress: Start from video 34</ins>***
+## ***<ins>Section 2</ins>***
 
 ## ***<ins>terraform init</ins>***
 terraform init scans the code for any of the providers (e.g. AWS, Azure, GCP, VMWare etc) being used by the code and download the provider's code.
@@ -353,3 +353,40 @@ terraform plan -refresh = false
 terraform plan -refresh = false -target = aws_instance.myec2
 # Here we are assuming that we've made change only to the EC2 Instance Resource Block
 ```
+## ***<ins>Section 3</ins>***
+
+### ***<ins>Terraform Provisioners</ins>***
+Provisioners are used to execute scripts on a local or remote machine as a part of resource creation or destruction. 
+```terraform
+resource "aws_instance" "myec2" {
+  ami                    = "ami-052cef05d01020f1d"
+  instance_type          = "t2.micro"
+  key_name               = "Master"
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo amazon-linux-extras install -y nginx1.12",
+      "sudo systemctl start nginx"
+    ]
+
+    connection {
+      type        = "ssh"
+      host        = self.public_ip
+      user        = "ec2-user"
+      private_key = file("/home/ec2-user/terraform.pem")
+
+    }
+  }
+}
+```
+
+### ***<ins>Types Of Provisioners</ins>***
+There are two types of provisioners:  
+1. Local Exec
+2. Remote Exec
+
+* <ins>Local Exec</ins>: Local Exec allows us to invoke local executables after a resource is created.
+```terraform
+provisioner "local-exec" {
+  command = "echo ${aws_instance.web.private_ip} >> private_ip.txt"
+}
