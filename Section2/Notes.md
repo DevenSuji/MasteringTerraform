@@ -277,3 +277,50 @@ output "arns" {
   value = aws_iam_user.lb[*].arn # The * here inside the square brackets is called splatting. LOL
 }
 ```
+
+### ***<ins>Terraform Graph</ins>***
+
+The ***terraform graph*** command is used to generate a visual representation of either a configuration or an execution plan.  
+The output of ***terraform graph*** command is in dot format and it can be easily be converted to and image file.
+The below command will save the output to a file with the .dot extension and this .dot file can be easily converted to an image file.
+
+```bash
+terraform graph > filename.dot
+```
+### ***<ins>Terraform Plan File</ins>***
+
+The generated terraform plan can be saved to a specific path. This plan can then be used with terraform apply to be certain that only the changes shown in this plan are applied.
+```bash
+terraform plan -out=filename
+```
+
+### ***<ins>Terraform Output</ins>***
+
+```terraform
+resource "aws_iam_user" "lb" {
+  name = "iamuser.${count.index}"
+  count = 3
+  path = "/system/"
+}
+
+output "iam_names" {
+  value = aws_iam_user.lb[*].name
+}
+
+output "iam_arns" {
+  value = aws_iam_user.lb[*].arn
+}
+```
+See the output below
+```bash
+iam_arns = [
+  "arn:aws:iam::309673166815:user/system/iamuser.0",
+  "arn:aws:iam::309673166815:user/system/iamuser.1",
+  "arn:aws:iam::309673166815:user/system/iamuser.2",
+]
+iam_names = [
+  "iamuser.0",
+  "iamuser.1",
+  "iamuser.2",
+]
+```
