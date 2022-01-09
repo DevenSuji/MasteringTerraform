@@ -324,3 +324,19 @@ iam_names = [
   "iamuser.2",
 ]
 ```
+```bash
+terraform output iam_arns
+[
+  "arn:aws:iam::309673166815:user/system/iamuser.0",
+  "arn:aws:iam::309673166815:user/system/iamuser.1",
+  "arn:aws:iam::309673166815:user/system/iamuser.2",
+]
+```
+```bash
+terraform output iam_names
+[
+  "iamuser.0",
+  "iamuser.1",
+  "iamuser.2",
+]
+```
