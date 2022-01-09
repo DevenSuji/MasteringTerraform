@@ -340,3 +340,15 @@ terraform output iam_names
   "iamuser.2",
 ]
 ```
+### ***<ins>Dealing With Large Infrastructure</ins>***
+When doing a ***terraform init, terraform plan and terraform apply*** there are a ot of api calls that are made to the AWS API Endpoint.   
+There is a limit for the number of API Calls that can be made to AWS and if we hit this API query limit then things can be really bad.   
+In order to limit the number of API calls there are few tricks that can be used.  
+1. Preventing the refresh by using the ***terraform plan -refresh = false*** tag.  
+```bash
+terraform plan -refresh = false
+```
+2. By specifying the target resource that we made the change to using ***terraform plan -target=ec2***. This simply means that we've made change only to the EC2 resource and only the API calls belonging to EC2 resource will be made. This is generally used as a means to operate on isolated portions of very large configurations.
+```bash
+terraform plan -target=<name of the resource that we have changed>
+```
