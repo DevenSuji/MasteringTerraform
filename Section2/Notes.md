@@ -390,3 +390,5 @@ There are two types of provisioners:
 provisioner "local-exec" {
   command = "echo ${aws_instance.web.private_ip} >> private_ip.txt"
 }
+
+* <ins>Remote Exec</ins>: Remote Exec allows us to invoke scripts directly on the remote server.
