@@ -351,4 +351,5 @@ terraform plan -refresh = false
 2. By specifying the target resource that we made the change to using ***terraform plan -target=ec2***. This simply means that we've made change only to the EC2 resource and only the API calls belonging to EC2 resource will be made. This is generally used as a means to operate on isolated portions of very large configurations.
 ```bash
 terraform plan -refresh = false -target = aws_instance.myec2
+# Here we are assuming that we've made change only to the EC2 Instance Resource Block
 ```
