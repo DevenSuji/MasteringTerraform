@@ -4,3 +4,4 @@ terrform.tfstate
 *.tfstate.backup
 *.terraform.tfstate
 *terraform.tfstate
+*.pem

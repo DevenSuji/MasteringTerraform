@@ -1,3 +1,4 @@
+/*
 terraform {
   required_providers {
     aws = {
@@ -26,9 +27,9 @@ resource "aws_instance" "myec2" {
       type        = "ssh"
       host        = self.public_ip
       user        = "ec2-user"
-      private_key = file("/home/ec2-user/terraform.pem")
+      private_key = file("./terraform.pem")
 
     }
   }
 }
-
+*/

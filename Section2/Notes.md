@@ -380,15 +380,42 @@ resource "aws_instance" "myec2" {
 }
 ```
 
-### ***<ins>Types Of Provisioners</ins>***
-There are two types of provisioners:  
-1. Local Exec
-2. Remote Exec
+### ***<ins>Provisioners</ins>***
 
-* <ins>Local Exec</ins>: Local Exec allows us to invoke local executables after a resource is created.
+* <ins>Local Exec</ins>: Local Exec allows us to invoke local executables after a resource is created. Local Exec will execute on the machine where the terraform has been invoked from (local machine).
 ```terraform
 provisioner "local-exec" {
   command = "echo ${aws_instance.web.private_ip} >> private_ip.txt"
 }
 ```
 * <ins>Remote Exec</ins>: Remote Exec allows us to invoke scripts directly on the remote server.
+```terraform
+resource "aws_instance" "myec2" {
+  ami                    = "ami-052cef05d01020f1d"
+  instance_type          = "t2.micro"
+  key_name               = "terraform"
+
+  # This is the remote exec provisioner
+  provisioner "remote-exec" {
+    inline = [
+      "sudo amazon-linux-extras install -y nginx1.12",
+      "sudo systemctl start nginx"
+    ]
+
+    connection {
+      type        = "ssh"
+      host        = self.public_ip
+      user        = "ec2-user"
+      private_key = file("./terraform.pem")
+
+    }
+  }
+}
+```
+### ***<ins>Types Of Provisioners</ins>***
+There are two primary types of Provisioners
+#### ***<ins>Creation Time Provisioner</ins>***
+Creation Time Provisioner are only run during the creation and not during updating or any other life cycle.  
+If a creation time provisioner fails, then the resource is marked as tainted.
+#### ***<ins>Destroy Time Provisioner</ins>***
+Destroy Time Provisioner run before the resource is destroyed.
