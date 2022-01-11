@@ -482,6 +482,18 @@ It is very important to never modify the state file directly. Instead make use o
 | mv | Moves item with terraform state. |
 | pull | Manually download and output the state from remote state. |
 | push | Manually upload a local state file to remote state. |
-| rm | Remove items from terraform state. |
+| rm | Remove the resource from terraform state file only. But the resource does not get deleted in the actual infra.|
 | show | Show the attribute of single resource in a terraform state. |
 
+Listing the resources in the terraform state file.
+```bash
+terraform state list
+```
+Renaming the aws_instance from webapp to myec2
+```bash
+terraform state mv aws_instance.webapp aws_instance.myec2
+```
+Pulling a remote state file
+```bash
+terraform state pull
+```
