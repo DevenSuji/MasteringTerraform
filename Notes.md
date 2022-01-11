@@ -419,3 +419,36 @@ Creation Time Provisioner are only run during the creation and not during updati
 If a creation time provisioner fails, then the resource is marked as tainted.
 #### ***<ins>Destroy Time Provisioner</ins>***
 Destroy Time Provisioner run before the resource is destroyed.
+
+### ***<ins>Terraform Workspace</ins>***
+
+Workspace in Terrform is a completely seperate environment. Just like linux namespace.
+
+To see the current workspace that we are on use the below command.
+```bash
+terraform workspace show
+```
+
+To see a list of workspaces that are available on our machine.
+```bash
+terraform workspace list
+```
+
+To create a new workspace use the below command. Note that when you create a new workspace, the command will automatically switch to the newly created workspace.
+```bash
+terrform workspace new development
+```
+
+To switch to an already existing workspace
+```bash
+terraform workspace select NameOfTheWorkSpace
+```
+
+To delete an already existing workspace
+```bash
+terraform workspace delete NameOfTheWorkSpace
+```
+### ***<ins>Location Terraform Workspace Directory</ins>***
+By default the terraform.tfstate file will be created on the root directory if we are running the terraform apply command on the default workspace. 
+   
+However, if we are on any other custom workspace for example development workspace, then the terraform.tfstate file will be created within terraform.tfstate.d/development directory.

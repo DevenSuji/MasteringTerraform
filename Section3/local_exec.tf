@@ -1,4 +1,4 @@
-
+/*
 terraform {
   required_providers {
     aws = {
@@ -20,4 +20,4 @@ resource "aws_instance" "myec2" {
     command = "echo ${aws_instance.myec2.private_ip} >> private_ip.txt"
   }
 }
-
+*/
