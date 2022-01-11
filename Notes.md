@@ -452,3 +452,36 @@ terraform workspace delete NameOfTheWorkSpace
 By default the terraform.tfstate file will be created on the root directory if we are running the terraform apply command on the default workspace. 
    
 However, if we are on any other custom workspace for example development workspace, then the terraform.tfstate file will be created within terraform.tfstate.d/development directory.
+
+
+### ***<ins>Terraform Remote Backend</ins>***
+Here we will use an AWS S3 bucket to store the terraform.tfstate file and use the dynamodb to perform the state lock operation.  
+1. Create a S3 Bucket.
+2. Create a Dynamo DB Table giving the Table name and Partition key as LockID.
+3. Configure the backend.tf file as shown below.
+```terraform
+terraform {
+  backend "s3" {
+    bucket = "Name_Of_The_S3_Bucket"
+    key    = "remote-state.tfstate"
+    region = "ap-south-1"
+    dynamodb_table = "Name_Of_The_DynamoDB_Table"
+  }
+}
+```
+4. Run terraform init and terraform plan and the state locking will work now.
+
+### ***<ins>Terraform State Management Using Commands</ins>***
+As our terraform state file keeps growing as we'll be adding more and more resources to the configurtion file. There will be some use cases where we have to manually modify the terraform.tfstate file.  
+  
+It is very important to never modify the state file directly. Instead make use of terraform state command.
+
+| State Sub Command | Description | 
+| :---: | :---: |
+| list | List resources within terraform state file. | 
+| mv | Moves item with terraform state. |
+| pull | Manually download and output the state from remote state. |
+| push | Manually upload a local state file to remote state. |
+| rm | Remove items from terraform state. |
+| show | Show the attribute of single resource in a terraform state. |
+
