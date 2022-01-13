@@ -497,3 +497,68 @@ Pulling a remote state file
 ```bash
 terraform state pull
 ```
+### ***<ins>Using ALIAS to deploy identical resource to multiple regions</ins>***
+See below on how we've used the alias attribute to deploy identical resource to multiple regions.
+
+provider.ft file
+
+```terraform
+provider "aws" {
+  region = "ap-south-1"
+}
+
+provider "aws" {
+  alias = "America"
+  region = "us-east-1"
+}
+```
+
+eip.tf
+
+```terraform
+resource "aws_eip" "myeip" {
+  vpc = true
+}
+
+resource "aws_eip" "myeip1" {
+  vpc = true
+  provider = aws.America
+}
+```
+### ***<ins>Deploying Multiple Resources in Different Accounts</ins>***
+Ensure that the credentials for the other accounts is defined in the .aws/credentials file.
+```terraform
+provider "aws" {
+  region = "ap-south-1"
+}
+
+provider "aws" {
+  alias = "America"
+  region = "us-east-1"
+  profile = account2
+}
+
+provider "aws" {
+  alias = "Europe"
+  region = "europe-east-1"
+  profile = account3
+}
+```
+
+eip.tf
+
+```terraform
+resource "aws_eip" "myeip" {
+  vpc = true
+}
+
+resource "aws_eip" "myeip1" {
+  vpc = true
+  provider = aws.America
+}
+
+resource "aws_eip" "myeip1" {
+  vpc = true
+  provider = aws.Europe
+}
+```
