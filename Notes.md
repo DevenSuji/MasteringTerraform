@@ -1,18 +1,125 @@
 # ***<ins>Terraform</ins>***
 
-## ***<ins>Section 2</ins>***
+## ***<ins>Terraform Providers</ins>***
+A provider is responsible for understanding API interactions and exposing resources.  
+  
+Most of the available providers correspond to one cloud or on-premises infrastructure platform and offer resource types that correspond to each of the features of that platform.
+
+You can explicitly set a specific version of the provider within the provider block.
+
+To upgrade to the latest acceptable version of each provider, run terraform init -upgrade
+
+## ***<ins>Multiple Provider Instances</ins>***
+
+You can have multiple provider instances with the help of an alias
+
+```terraform
+provider "aws" {
+  region = "us-east-1"
+}
+provider "aws" {
+  alias  = "west"
+  region = "us-west-2"
+}
+```
+The provider block without alias set is known as the default provider configuration. When an alias is set, it creates an additional provider configuration.
 
 ## ***<ins>terraform init</ins>***
-terraform init scans the code for any of the providers (e.g. AWS, Azure, GCP, VMWare etc) being used by the code and download the provider's code.
-By default the provider's code will be downloaded into .terraform folder.
-It is always advisable to add .terraform to gitignore.
+The terraform init command is used to initialize a working directory containing Terraform configuration files.
+
+During init, the configuration is searched for module blocks, and the source code for referenced modules is retrieved from the locations given in their source arguments.  
+  
+Terraform must initialize the provider before it can be used.
+
+Initialization downloads and installs the provider's plugin so that it can later be executed.
+
+It will not create any sample files like example.tf
+
 
 ## ***<ins>terraform plan</ins>***
+The terraform plan command is used to create an execution plan.
+
+It will not modify things in infrastructure.
+
+Terraform performs a refresh, unless explicitly disabled, and then determines what actions are necessary to achieve the desired state specified in the configuration files.
+
+This command is a convenient way to check whether the execution plan for a set of changes matches your expectations without making any changes to real resources or to the state.
+
 This command will let us see what terraform will do before actually making changes.  
 Anylines with (+) will be created.  
 Anylines with (-) will be deleted.  
 Anylines with (~) will be modified in place.  
 
+## ***<ins>terraform apply</ins>***
+The terraform apply command is used to apply the changes required to reach the desired state of the configuration.  
+Terraform apply will also write data to the terraform.tfstate file.  
+Once apply is completed, resources are immediately available.
+
+## ***<ins>terraform refresh</ins>***
+The terraform refresh command is used to reconcile the state Terraform knows about (via its state file) with the real-world infrastructure.
+This does not modify infrastructure but does modify the state file.
+
+## ***<ins>terraform destroy</ins>***
+The terraform destroy command is used to destroy the Terraform-managed infrastructure.  
+terraform destroy command is not the only command through which infrastructure can be destroyed.
+The other way to destroy a resource is by simply going to the configuration file and removing the resource. When terraform is applied, the intended resource will get wiped out.
+
+## ***<ins>terraform format</ins>***
+
+It simply formats the terraform code as per the convention.
+
+## ***<ins>terraform validate</ins>***
+The terraform validate command validates the configuration files in a directory.
+
+Validate runs checks that verify whether a configuration is syntactically valid and thus primarily useful for general verification of reusable modules, including the correctness of attribute names and value types.
+
+It is safe to run this command automatically, for example, as a post-save check in a text editor or as a test step for a reusable module in a CI system. It can run before terraform plan.
+
+Validation requires an initialized working directory with any referenced plugins and modules installed.
+
+## ***<ins>terraform provisioners</ins>***
+Provisioners can be used to model specific actions on the local machine or on a remote machine in order to prepare servers or other infrastructure objects for service.
+
+Provisioners should only be used as a last resort. For most common situations, there are better alternatives.
+
+Provisioners are inside the resource block.
+
+Have an overview of local and remote provisioner
+```terraform
+resource "aws_instance" "web" {
+  # ...
+  provisioner "local-exec" {
+    command = "echo The server IP address is ${self.private_ip}"
+  }
+}
+```
+## ***<ins>Debugging In Terraform</ins>***
+Terraform has detailed logs that can be enabled by setting the TF_LOG environment variable to any value.
+
+You can set TF_LOG to one of the log levels TRACE, DEBUG, INFO, WARN or ERROR to change the verbosity of the logs.
+
+Example:
+
+TF_LOG=TRACE
+
+To persist logged output, you can set TF_LOG_PATH
+
+
+## ***<ins>Terraform Import</ins>***
+Terraform is able to import existing infrastructure. 
+
+This allows you to take resources that you've created by some other means and bring it under Terraform management.
+
+The current implementation of Terraform import can only import resources into the state. It does not generate configuration.
+
+Because of this, prior to running terraform import, it is necessary to write a resource configuration block manually for the resource, to which the imported object will be mapped.
+
+```bash
+terraform import aws_instance.myec2 instance-id
+```
+## ***<ins>Local Values</ins>***
+
+  
 ### ***<ins>Ways to define variables.</ins>***
 
 ***Variables in terraform can be assigned in multiple ways. Some of these include***
