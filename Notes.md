@@ -9,6 +9,11 @@ You can explicitly set a specific version of the provider within the provider bl
 
 To upgrade to the latest acceptable version of each provider, run terraform init -upgrade
 
+To see the list of providers that the config file is using use the below command.
+```bash
+terraform providers
+```
+
 ## ***<ins>Multiple Provider Instances</ins>***
 
 You can have multiple provider instances with the help of an alias
@@ -146,6 +151,16 @@ variable "instancetype" {
     default = "t2.micro"
 }
 ```
+### ***<ins>Terraform Variable Precedence.</ins>***
+Below is the terraform variable precedence with the highest precedence at the top and the lowest precedence at the bottom.
+| Variables |
+| :---: | 
+| -var and -var-file |
+| *.auto.tfvars or *.auto.tfvars.json |
+| terraform.tfvars.json |
+| terraform.tfvars |
+| Environment Variables |
+
 ### ***<ins>Type Constraints</ins>***
 
 The type argument in the variable block allows you to restrict the type of value that will be accepted as the value for the variable. If no type constraint is set that value of any type is accepted.
@@ -755,3 +770,38 @@ Enforcement levels in Terraform Cloud define behavior when policies fail to eval
 * Soft-mandatory is similar to hard-mandatory, but allows an administrator to override policy failures on a case-by-case basis.
 
 * Advisory will never interrupt the run, and instead will only surface policy failures as informational to the user.
+
+### ***<ins>Null Resource</ins>***
+null_resource is a place holder for resources that have no specific association to a provider resources.
+The null_resource implements the standard resource lifecycle but takes no further action.
+The triggers argument allows specifying an arbitrary set of values that, when changed, will cause the resource to be replaced.
+The primary use-case for the null resource is as a do-nothing container for arbitrary actions taken by a provisioner.
+
+In this example, three EC2 instances are created and then a null_resource instance is used to gather data about all three and execute a single action that affects them all. Due to the triggers map, the null_resource will be replaced each time the instance ids change, and thus the remote-exec provisioner will be re-run.
+
+```terraform
+resource "aws_instance" "cluster" {
+  count = 3
+}
+
+
+resource "null_resource" "cluster" {
+  # Changes to any instance of the cluster requires re-provisioning
+  triggers = {
+    cluster_instance_ids = join(",", aws_instance.cluster.*.id)
+  }
+
+  # Bootstrap script can run on any instance of the cluster
+  # So we just choose the first in this case
+  connection {
+    host = element(aws_instance.cluster.*.public_ip, 0)
+  }
+
+  provisioner "remote-exec" {
+    # Bootstrap script called with private_ip of each node in the clutser
+    inline = [
+      "bootstrap-cluster.sh ${join(" ", aws_instance.cluster.*.private_ip)}",
+    ]
+  }
+}
+```
