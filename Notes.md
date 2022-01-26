@@ -593,9 +593,9 @@ Setup the backend.tf file as shown below.
 terraform {
   backend "remote" {
     hostname = "app.terraform.io"
-    organization = "devensuji"
+    organization = "NameOfOrganizationInTerraformCloud"
     workspaces { 
-      name = "exampro" 
+      name = "NameOfTheWorkSpaceInTerraformCloud" 
     }
   }
 }
