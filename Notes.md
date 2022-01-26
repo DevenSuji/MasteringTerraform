@@ -153,7 +153,7 @@ variable "instancetype" {
 ```
 ### ***<ins>Terraform Variable Precedence.</ins>***
 Below is the terraform variable precedence with the highest precedence at the top and the lowest precedence at the bottom.
-| Variables |
+| Variable Precedence |
 | :---: | 
 | -var and -var-file |
 | *.auto.tfvars or *.auto.tfvars.json |
