@@ -526,7 +526,7 @@ Remote Exec (Remote Command) has has three different modes:
 * Scripts: Relative or absolute local scripts that will be copied to the remote resource then executed and executed in order. 
 
 One can only choose to use one mode at a time.
- 
+
 ### ***<ins>Types Of Provisioners</ins>***
 There are two primary types of Provisioners
 #### ***<ins>Creation Time Provisioner</ins>***
@@ -563,7 +563,7 @@ To delete an already existing workspace
 ```bash
 terraform workspace delete NameOfTheWorkSpace
 ```
-### ***<ins>Location Terraform Workspace Directory</ins>***
+### ***<ins>Location Of Terraform Workspace Directory</ins>***
 By default the terraform.tfstate file will be created on the root directory if we are running the terraform apply command on the default workspace. 
    
 However, if we are on any other custom workspace for example development workspace, then the terraform.tfstate file will be created within terraform.tfstate.d/development directory.
