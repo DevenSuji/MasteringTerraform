@@ -1,3 +1,3 @@
-workspaces { name = "Remote_Operations"}
+workspaces { name = "Remote_Operations" }
 hostname = "app.terraform.io"
 organization = "devensuji"

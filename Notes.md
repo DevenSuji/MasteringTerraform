@@ -78,7 +78,7 @@ It is safe to run this command automatically, for example, as a post-save check 
 Validation requires an initialized working directory with any referenced plugins and modules installed.
 
 ## ***<ins>terraform provisioners</ins>***
-Provisioners can be used to model specific actions on the local machine or on a remote machine in order to prepare servers or other infrastructure objects for service.
+Provisioners can be used to model specific actions on the local machine or on a remote machine in order to prepare servers or other infrastructure objects for service. The action could vary from installing softwares and editing files etc.
 
 Provisioners should only be used as a last resort. For most common situations, there are better alternatives.
 
@@ -519,6 +519,14 @@ resource "aws_instance" "myec2" {
   }
 }
 ```
+Remote Exec (Remote Command) has has three different modes:  
+
+* InLine: List of command strings.
+* Script: Relative or absolute local script that will be copied to the remote resource then executed.
+* Scripts: Relative or absolute local scripts that will be copied to the remote resource then executed and executed in order. 
+
+One can only choose to use one mode at a time.
+ 
 ### ***<ins>Types Of Provisioners</ins>***
 There are two primary types of Provisioners
 #### ***<ins>Creation Time Provisioner</ins>***
@@ -561,7 +569,7 @@ By default the terraform.tfstate file will be created on the root directory if w
 However, if we are on any other custom workspace for example development workspace, then the terraform.tfstate file will be created within terraform.tfstate.d/development directory.
 
 
-### ***<ins>Terraform Remote Backend</ins>***
+### ***<ins>AWS S3 as Terraform Remote Backend</ins>***
 Here we will use an AWS S3 bucket to store the terraform.tfstate file and use the dynamodb to perform the state lock operation.  
 1. Create a S3 Bucket.
 2. Create a Dynamo DB Table giving the Table name and Partition key as LockID.
@@ -577,6 +585,63 @@ terraform {
 }
 ```
 4. Run terraform init and terraform plan and the state locking will work now.
+
+
+### ***<ins>Terraform Cloud as Remote Backend</ins>***
+Setup the backend.tf file as shown below.
+```terraform
+terraform {
+  backend "remote" {
+    hostname = "app.terraform.io"
+    organization = "devensuji"
+    workspaces { 
+      name = "exampro" 
+    }
+  }
+}
+```
+1. Create a new Organisation in Terraform Cloud.
+2. Create a new cli driven workspace.
+3. Type terraform login and then type yes. This will open a browser with the terraform api token. Generate a new token if needed. Copy the token and paste the same in the command line on your machine.
+4. Supply terraform init in the command line and it will give you the below output.
+```bash
+terraform init
+
+Initializing the backend...
+
+Successfully configured the backend "remote"! Terraform will automatically
+use this backend unless the backend configuration changes.
+
+Initializing provider plugins...
+- Finding latest version of hashicorp/aws...
+- Installing hashicorp/aws v3.73.0...
+- Installed hashicorp/aws v3.73.0 (signed by HashiCorp)
+
+Terraform has created a lock file .terraform.lock.hcl to record the provider
+selections it made above. Include this file in your version control repository
+so that Terraform can guarantee to make the same selections by default when
+you run "terraform init" in the future.
+
+Terraform has been successfully initialized!
+
+You may now begin working with Terraform. Try running "terraform plan" to see
+any changes that are required for your infrastructure. All Terraform commands
+should now work.
+
+If you ever set or change modules or backend configuration for Terraform,
+rerun this command to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to do so if necessary.
+```
+5. You are all set with your remote backend as terraform cloud.
+
+### ***<ins>Migrating Terraform Remote Backend from AWS S3 or Terraform Cloud to Local Mahcine</ins>***
+
+1. Comment or delete the backend file/configuration.
+2. Run the command terraform init -migrate-state.
+```bash
+terraform init -migrate-state
+```
+3. You should have the terraform.tfstate file created locall only your machine now.
 
 ### ***<ins>Terraform State Management Using Commands</ins>***
 As our terraform state file keeps growing as we'll be adding more and more resources to the configurtion file. There will be some use cases where we have to manually modify the terraform.tfstate file.  
@@ -669,3 +734,24 @@ resource "aws_eip" "myeip1" {
   provider = aws.Europe
 }
 ```
+### ***<ins>Sentinel Policy Set</ins>***
+Sentinel is an embedded policy-as-code framework integrated with various HashiCorp products. It enables fine-grained, logic-based policy decisions, and can be extended to use information from external sources. Terraform Cloud enables users to enforce policies during runs.
+
+A policy consists of:
+
+* The policy controls defined as code
+* An enforcement level that changes how a policy affects the run lifecycle
+
+sentinel.hcl defines the policy set. This configuration declares a policy named allowed-terraform-version and sets a soft-mandatory enforcement level. You can define multiple policy blocks in the sentinel.hcl file to configure more policies.
+```terraform
+policy "allowed-terraform-version" {
+    enforcement_level = "soft-mandatory"
+}
+```
+Enforcement levels in Terraform Cloud define behavior when policies fail to evaluate successfully. Sentinel provides three enforcement modes.
+
+* Hard-mandatory requires that the policy passes. If a policy fails, the run is halted and may not be applied until the failure is resolved.
+
+* Soft-mandatory is similar to hard-mandatory, but allows an administrator to override policy failures on a case-by-case basis.
+
+* Advisory will never interrupt the run, and instead will only surface policy failures as informational to the user.
