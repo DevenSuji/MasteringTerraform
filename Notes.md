@@ -805,3 +805,33 @@ resource "null_resource" "cluster" {
   }
 }
 ```
+### ***<ins>Upgrade the AWS provider version</ins>***
+
+The -upgrade flag will upgrade all providers to the latest version consistent within the version constraints previously established in your configuration.
+```bash
+terraform init -upgrade
+```
+One can also use the -upgrade flag to downgrade the provider versions if the version constraints are modified to specify a lower provider version.
+
+### ***<ins>Terraform Supported VCS Providers</ins>***
+Terraform Cloud supports the following VCS providers as of January 2022:
+
+  - GitHub
+  - GitHub.com (OAuth)
+  - GitHub Enterprise
+  - GitLab.com
+  - GitLab EE and CE
+  - Bitbucket Cloud
+  - Bitbucket Server
+  - Azure DevOps Server
+  - Azure DevOps Services
+
+### ***<ins>Terraform Supported OS Platforms</ins>***
+Terraform is available for 
+
+* macOS
+* FreeBSD
+* OpenBSD
+* Linux
+* Solaris
+* Windows 
