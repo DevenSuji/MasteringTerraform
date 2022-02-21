@@ -7,6 +7,11 @@ Most of the available providers correspond to one cloud or on-premises infrastru
 
 You can explicitly set a specific version of the provider within the provider block.
 
+There are two ways for you to manage provider versions in your configuration.
+
+* Specify provider version constraints in your configuration's terraform block.
+* Use the dependency lock file.
+
 To upgrade to the latest acceptable version of each provider, run terraform init -upgrade
 
 To see the list of providers that the config file is using use the below command.
@@ -60,7 +65,7 @@ The terraform apply command is used to apply the changes required to reach the d
 Terraform apply will also write data to the terraform.tfstate file.  
 Once apply is completed, resources are immediately available.
 
-## ***<ins>terraform refresh</ins>***
+## ***<ins>terraform refresh and refresh-only</ins>***
 The terraform refresh command is used to reconcile the state Terraform knows about (via its state file) with the real-world infrastructure.
 This does not modify infrastructure but does modify the state file.
 
@@ -151,6 +156,80 @@ variable "instancetype" {
     default = "t2.micro"
 }
 ```
+### ***<ins>Terraform Variable Types</ins>***
+
+Strings
+```terraform
+variable "aws_region" {
+  description = "AWS region"
+  type        = string
+  default     = "ap-south-1"
+}
+
+variable "vpc_cidr_block" {
+  description = "CIDR block for VPC"
+  type        = string
+  default     = "10.0.0.0/16"
+}
+```
+Numbers
+```terraform
+variable "instance_count" {
+  description = "Number of instances to provision."
+  type        = number
+  default     = 2
+}
+```
+Bool
+```terraform
+variable "enable_vpn_gateway" {
+  description = "Enable a VPN gateway in your VPC."
+  type        = bool
+  default     = false
+}
+```
+
+Terraform also supports collection variable types that contain more than one value. Terraform supports several collection variable types as listed below:
+
+List: A sequence of values of the same type.
+```terraform
+variable "public_subnet_cidr_blocks" {
+  description = "Available cidr blocks for public subnets."
+  type        = list(string)
+  default = [
+    "10.0.1.0/24",
+    "10.0.2.0/24",
+    "10.0.3.0/24",
+    "10.0.4.0/24",
+    "10.0.5.0/24",
+    "10.0.6.0/24",
+    "10.0.7.0/24",
+    "10.0.8.0/24",
+  ]
+}
+```
+Map: A lookup table, matching keys to values, all of the same type.
+```terraform
+variable "resource_tags" {
+  description = "Tags to set for all resources"
+  type        = map(string)
+  default     = {
+    project     = "project-alpha",
+    environment = "dev"
+  }
+}
+```
+
+Set: An unordered collection of unique values, all of the same type.
+
+Lists and maps are collection types. Terraform also supports two structural types. Structural types have a fixed number of values that can be of different types.
+
+Tuple: A fixed-length sequence of values of specified types.
+Object: A lookup table, matching a fixed set of keys to values of specified types.
+
+### ***<ins>Terraform Variable Loading.</ins>***
+Terraform automatically loads all files in the current directory with the exact name terraform.tfvars or matching *.auto.tfvars. One can also use the -var-file flag to specify other files by name.
+
 ### ***<ins>Terraform Variable Precedence.</ins>***
 Below is the terraform variable precedence with the highest precedence at the top and the lowest precedence at the bottom.
 | Variable Precedence |
@@ -160,6 +239,29 @@ Below is the terraform variable precedence with the highest precedence at the to
 | terraform.tfvars.json |
 | terraform.tfvars |
 | Environment Variables |
+
+### ***<ins>Interpolate variables in strings</ins>***
+Terraform configuration supports string interpolation — inserting the output of an expression into a string. This allows you to use variables, local values, and the output of functions to create strings in your configuration.
+
+Updating the names of the security groups to use the project and environment values from the resource_tags map using the interpolation.
+
+```terraform
+ module "app_security_group" {
+   source  = "terraform-aws-modules/security-group/aws//modules/web"
+   version = "3.12.0"
+
+-  name        = "web-sg-project-alpha-dev"
+# Below line is the example of string interpolation
++  name        = "web-sg-${var.resource_tags["project"]}-${var.resource_tags["environment"]}"
+
+   description = "Security group for web-servers with HTTP ports open within VPC"
+   vpc_id      = module.vpc.vpc_id
+
+   ingress_cidr_blocks = module.vpc.public_subnets_cidr_blocks
+
+   tags = var.resource_tags
+ }
+```
 
 ### ***<ins>Type Constraints</ins>***
 
@@ -826,7 +928,7 @@ Terraform Cloud supports the following VCS providers as of January 2022:
   - Azure DevOps Server
   - Azure DevOps Services
 
-### ***<ins>Terraform Supported OS Platforms</ins>***
+
 Terraform is available for 
 
 * macOS
@@ -835,3 +937,15 @@ Terraform is available for
 * Linux
 * Solaris
 * Windows 
+
+### ***<ins>Replace a resource with CLI</ins>***
+
+Terraform usually only updates your infrastructure if it does not match your configuration. You can use the -replace flag for terraform plan and terraform apply operations to safely recreate resources in your environment even if you have not edited the configuration, which can be useful in cases of system malfunction.
+Replacing a resource is also useful in cases where a user manually changes a setting on a resource or when you need to update a provisioning script. This allows you to rebuild specific resources and avoid a full terraform destroy operation on your configuration. The -replace flag allows you to target specific resources and avoid destroying all the resources in your workspace just to fix one of them.
+```bash
+terraform plan -replace="aws_instance.example"
+terraform apply -replace="aws_instance.example" -auto-approve
+```
+
+### ***<ins>Move a resource to a different state file</ins>***
+The terraform state mv command moves resources from one state file to another. You can also rename resources with mv. The move command will update the resource in state, but not in your configuration file. Moving resources is useful when you want to combine modules or resources from other states, but do not want to destroy and recreate the infrastructure.

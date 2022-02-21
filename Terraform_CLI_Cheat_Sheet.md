@@ -22,15 +22,22 @@
 
 ### ***<ins>Terraform Configuration</ins>***
 
-***terraform show***
 
 ***terraform import***
 
 ### ***<ins>Terraform State</ins>***
 
+***terraform show*** Gets a human-friendly output of the resources contained in your state.
+
+The -replace flag allows you to target specific resources and avoid destroying all the resources in your workspace just to fix one of them. In older versions of Terraform, you may have used the terraform taint command to achieve a similar outcome. That command has now been deprecated in favor of the -replace flag, which allows for a simpler, less error-prone workflow. 
+```bash
+terraform plan -replace="aws_instance.example"
+terraform apply -replace="aws_instance.example"
+```
+
 ***terraform state list*** : To get the list of resource names and local identifiers in your state file. 
 
-***terraform state mv*** command moves resources from one state file to another.
+***terraform state mv*** command moves resources from one state file to another. You can also rename resources with mv. The move command will update the resource in state, but not in your configuration file. Moving resources is useful when you want to combine modules or resources from other states, but do not want to destroy and recreate the infrastructure. 
 
 ***terraform state mv -state-out=../terraform.tfstate aws_instance.example_new aws_instance.example_new***
 
@@ -38,6 +45,9 @@
 
 ***terraform refresh*** command updates the state file when physical resources change outside of the Terraform workflow.
 
+***terraform plan -refresh-only*** Terraform's -refresh-only mode safely compares your infrastructure and state file without actually making a change to the state file. 
+
+***terraform apply -refresh-only*** Terraform's -refresh-only mode safely compares your infrastructure and state file without actually making a change to the state file.
 
 ### ***<ins>Terraform State</ins>***
 
