@@ -968,12 +968,26 @@ The terraform state mv command moves resources from one state file to another. Y
     - Required Terraform Versions.
     - The list of Required Providers.
     - Terraform backend information.   
+
+### Very Important:
+Within a terraform block only constant values has to be used. Which means all the values in the terraform block has to be hard coded. No expressions and No functions etc.  
   
 * <b>Provider Block:</b> 
     - Provider Block is the heart of terraform. 
     - Terraform relies on providers to interact with the the remote systems like aws cloud. 
     - In this block we declare the providers so that terraform can install the same for us and use the same to interact with the remote systems.
     - Provider configuration always belongs to the ROOT Module and not the CHILD Module.
+    - Every resource type (like EC2 instance) is implemented by a Provider.
+    - Without providers Terraform cannot manage any infrastructure.
+    - Providers are distributed seperately from Terraform and each provider has it's own release cycles and versions.
+    - Providers are downloaded from Terraform registry and it is publicly available.
+    - Some of the attributes that are defined in the provider block are:
+        1. region (aws region)
+        2. profile (default / development / testing / production)
+        3. access_key
+        4. secret_key  
+    Note: When the profile is not mentioned, it means that the default profile will be used.
+    Note: Passing access key and secret key is also not the greatest idea. It should get picked up from the environment variables if the same is defined.
 
 * <b>Resource Block:</b>
     - Each resource block describes onre or more infrastructure objects.
