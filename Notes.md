@@ -980,6 +980,9 @@ The terraform state mv command moves resources from one state file to another. Y
     - Resource syntax needs to be followed here.
     - Resource behaviour. How terraform handles the resources declarations.
     - Provisioners: Once the object is created by the resource block, then the provisioners can kick in to perform the post configuration.
+
+Do note that Terraform Block and the Provider Block sits in the c1-versions.tf and Resource Block sits in the c2-versions.tf.  
+  
 #### 2. Variables Block
 * <b>Input Variables Block:</b>
 * <b>Output Values Block:</b>
