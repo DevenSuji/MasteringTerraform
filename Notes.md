@@ -964,17 +964,27 @@ The terraform state mv command moves resources from one state file to another. Y
 
 ### Terraform Top Level Blocks can be categorized into below three categories:
 #### 1. Fundamental Block
-* <u><b>Terraform Block:</b></u> This is a special block which is used to configure some behaviours. It will inculde the details listed below:
+* <b>Terraform Block:</b> This is a special block which is used to configure some behaviours. It will inculde the details listed below:
     - Required Terraform Versions.
     - The list of Required Providers.
-    - Terraform backend information. 
-* <u><b>Provider Block:</b></u>
-* <u><b>Resource Block:</b></u>
+    - Terraform backend information.   
+  
+* <b>Provider Block:</b> 
+    - Provider Block is the heart of terraform. 
+    - Terraform relies on providers to interact with the the remote systems like aws cloud. 
+    - In this block we declare the providers so that terraform can install the same for us and use the same to interact with the remote systems.
+    - Provider configuration always belongs to the ROOT Module and not the CHILD Module.
+
+* <b>Resource Block:</b>
+    - Each resource block describes onre or more infrastructure objects.
+    - Resource syntax needs to be followed here.
+    - Resource behaviour. How terraform handles the resources declarations.
+    - Provisioners: Once the object is created by the resource block, then the provisioners can kick in to perform the post configuration.
 #### 2. Variables Block
-* <u><b>Input Variables Block:</b></u>
-* <u><b>Output Values Block:</b></u>
-* <u><b>Local Values Block:</b></u>
+* <b>Input Variables Block:</b>
+* <b>Output Values Block:</b>
+* <b>Local Values Block:</b>
 #### 3. Calling/Referencing Block
-* <u><b>Data Sources Block:</b></u>
-* <u><b>Modules Block:</b></u>
+* <b>Data Sources Block:</b>
+* <b>Modules Block:</b>
 
