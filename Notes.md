@@ -965,9 +965,9 @@ The terraform state mv command moves resources from one state file to another. Y
 ### Terraform Top Level Blocks can be categorized into below three categories:
 #### 1. Fundamental Block
 * <u><b>Terraform Block:</b></u> This is a special block which is used to configure some behaviours. It will inculde the details listed below:
-- Required Terraform Versions.
-- The list of Required Providers.
-- Terraform backend information. 
+    - Required Terraform Versions.
+    - The list of Required Providers.
+    - Terraform backend information. 
 * <u><b>Provider Block:</b></u>
 * <u><b>Resource Block:</b></u>
 #### 2. Variables Block
