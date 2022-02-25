@@ -949,3 +949,27 @@ terraform apply -replace="aws_instance.example" -auto-approve
 
 ### ***<ins>Move a resource to a different state file</ins>***
 The terraform state mv command moves resources from one state file to another. You can also rename resources with mv. The move command will update the resource in state, but not in your configuration file. Moving resources is useful when you want to combine modules or resources from other states, but do not want to destroy and recreate the infrastructure.
+
+### ***<ins>Terraform Top Level Blocks</ins>***
+* Terraform Settings Block.
+* Provider Block.
+* Resource Block.
+* Input Variables Block.
+* Output Values Block.
+* Local Values Block.
+* Data Sources Block.
+* Modules Block.
+
+### Terraform Top Level Blocks can be categorized into below three categories:
+#### 1. Fundamental Block
+* Terraform Block.
+* Provider Block.
+* Resource Block.
+#### 2. Variables Block
+* Input Variables Block.
+* Output Values Block.
+* Local Values Block.
+#### 3. Calling/Referencing Block
+* Data Sources Block.
+* Modules Block.
+
