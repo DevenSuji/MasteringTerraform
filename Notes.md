@@ -1097,3 +1097,13 @@ resource "aws_instance" "web" {
   }
 }
 ```
+Important Note: Instead of a list, the special keyword all maybe used to instruct Terraform to ignore all attributes, which means that Terraform can create and destroy the remote object but will never propose updates to it.
+```terraform
+resource "aws_instance" "example" {
+  # ...
+ 
+  lifecycle {
+    ignore_changes = all
+  }
+}
+```
