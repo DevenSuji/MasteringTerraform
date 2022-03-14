@@ -962,14 +962,14 @@ The terraform state mv command moves resources from one state file to another. Y
 * Data Sources Block.
 * Modules Block.
 
-### Terraform Top Level Blocks can be categorized into below three categories:
-#### 1. Fundamental Block
+### ***<ins>Terraform Top Level Blocks can be categorized into below three categories:</ins>***
+#### ***<ins>1. Fundamental Block</ins>***
 * <b>Terraform Block:</b> This is a special block which is used to configure some behaviours. It will inculde the details listed below:
     - Required Terraform Versions.
     - The list of Required Providers.
     - Terraform backend information.   
 
-### Very Important:
+### ***<ins>Very Important:</ins>***
 Within a terraform block only constant values has to be used. Which means all the values in the terraform block has to be hard coded. No expressions and No functions etc.  
   
 * <b>Provider Block:</b> 
@@ -990,18 +990,110 @@ Within a terraform block only constant values has to be used. Which means all th
     Note: Passing access key and secret key is also not the greatest idea. It should get picked up from the environment variables if the same is defined.
 
 * <b>Resource Block:</b>
-    - Each resource block describes onre or more infrastructure objects.
+    - Each resource block describes one or more infrastructure objects.
     - Resource syntax needs to be followed here.
     - Resource behaviour. How terraform handles the resources declarations.
     - Provisioners: Once the object is created by the resource block, then the provisioners can kick in to perform the post configuration.
+```terraform
+resource "aws_vpc" "vpc_ap-south-1" {
+  provider = aws.aws-south-1
+  cidr_block = "10.2.0.0/16"
+  tags = {
+    "Name" = "vpc-1"
+  }
+}
+```
+In the above example the word RESOURCE is of block type resource.
+The first lable "aws_vpc" is the RESOURCE TYPE.  
+The second lable "vpc_ap-south-1" is the RESOURCE LOCAL NAME.  
+The PROVIDER is the META ARGUMENT.
+The CIDR_BLOCK and TAGS are the RESOURCE ARGUMENTS. They will be specific to resource type. Argument values can make use of Expressions or other Terraform Dynamic Language features.
+
+### ***<ins>Resource Behaviour</ins>***
+A terraform resource will have the following behaviour:
+1. Create resource.
+2. Destroy resource.
+3. Update in place.
+4. Destroy and recrete.
+
+
 
 Do note that Terraform Block and the Provider Block sits in the c1-versions.tf and Resource Block sits in the c2-versions.tf.  
   
-#### 2. Variables Block
-* <b>Input Variables Block:</b>
+#### ***<ins>2. Variables Block</ins>***
+* <b>Input Variables Block:</b> There are 10 ways to define input variables in terraform.
+    * Input Variable Basic.
+    * Providing input variables when prompted during terraform plan or apply.
+    * Override default variables values using cli argument -var.
+    * Override default variables values using Environment Variables (TF_var_aa).
+    * Provide input variables using terraform.tfvars file.
+    * Provide input variables using <anyname>.tfvars file with cli argument -var-file.
+    * Provide input variables using auto.tfvars files.
+    * Implement complex type constructors like List and Maps in input variables.
+    * Implement Custom Validation Rules in variables.
+    * Protect sensitive input variables. 
+
+    
 * <b>Output Values Block:</b>
 * <b>Local Values Block:</b>
-#### 3. Calling/Referencing Block
+#### ***<ins>3. Calling/Referencing Block</ins>***
 * <b>Data Sources Block:</b>
 * <b>Modules Block:</b>
 
+### ***<ins>Resource Meta Arguments</ins>***
+Meta arguments can be used with any resource type to change the behaviour of the resource.
+Some of the examples of meta arguments are:
+* depends_on : To handle hidden resources or module dependencies that terraform can't automatically infer.
+* count : For creating multiple instance resources according to a count.
+* for_each : For creating multiple instance resources according to a map or a set of strings.
+* provider : For selecting a non default provider configuration. For example when deploying a same resource in different location we use alias.
+* lifecycle : Standard resource behaviour can be altered using special nested lifecycle block within a resource block body.
+* provisioners and connections: For taking extrac actions after resource creation. Example installing an app on the server after it's provisioning or do something on local desktop after resource is created at remote destination.
+
+### ***<ins>Resource Meta Arguments Lifecycle</ins>***
+1. create_before_destroy : This lifecycle argument when set to true will ensure the resource is created first before destroying it.
+
+```terraform
+# Create EC2 Instance
+resource "aws_instance" "web" {
+  ami               = "ami-0915bcb5fa77e4892" # Amazon Linux
+  instance_type     = "t2.micro"
+  availability_zone = "ap-south-1a"
+  tags = {
+    "Name" = "web-1"
+  }
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+```
+2. prevent_destroy : This lifecycle argument when set to true will ensure the resource is not destroyed when terraform destroy command is used. However be informed that if we remove the entire block from the configuration and then run terrform apply, the resource will get deleted.
+```terraform
+resource "aws_instance" "web" {
+  ami = "ami-0915bcb5fa77e4892" # Amazon Linux
+  instance_type = "t2.micro"
+  tags = {
+    "Name" = "web-2"
+  }
+  lifecycle {
+    prevent_destroy = true # Default is false
+  }
+}
+```
+3. ignore_changes : This lifecycle argument when set to true will ignore the changes. These changes are usually applied to the resource externally and not via terraform.
+```terraform
+resource "aws_instance" "web" {
+  ami = "ami-0915bcb5fa77e4892" # Amazon Linux
+  instance_type = "t2.micro"
+  tags = {
+    "Name" = "web-3"
+  }
+  lifecycle {
+    ignore_changes = [
+      # Ignore changes to tags, e.g. because a management agent
+      # updates these based on some ruleset managed elsewhere.
+      tags,
+    ]
+  }
+}
+```
