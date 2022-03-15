@@ -1035,6 +1035,7 @@ Do note that Terraform Block and the Provider Block sits in the c1-versions.tf a
     ```
 
     * Provide input variables using terraform.tfvars file.
+        * When terraform finds the file by the name terraform.tfvars then terraform will auto-load load the variables present in this file by overriding the default values in the variables.tf file.  
     * Provide input variables using <anyname>.tfvars file with cli argument -var-file.
     * Provide input variables using auto.tfvars files.
     * Implement complex type constructors like List and Maps in input variables.
