@@ -1026,6 +1026,14 @@ Do note that Terraform Block and the Provider Block sits in the c1-versions.tf a
     * Providing input variables when prompted during terraform plan or apply.
     * Override default variables values using cli argument -var.
     * Override default variables values using Environment Variables (TF_var_aa).
+    ```bash
+    export TF_VAR_ec2_instance_count=1  # Here ec2_instance_count is the variable name.
+    export TF_VAR_ec2_instance_type=t2.micro # Here ec2_instance_type is the variable name
+
+    unset TF_VAR_ec2_instance_count # unset is used remove the variable from environment variables.
+    unset TF_VAR_ec2_instance_type
+    ```
+
     * Provide input variables using terraform.tfvars file.
     * Provide input variables using <anyname>.tfvars file with cli argument -var-file.
     * Provide input variables using auto.tfvars files.
@@ -1034,8 +1042,11 @@ Do note that Terraform Block and the Provider Block sits in the c1-versions.tf a
     * Protect sensitive input variables. 
 
     
-* <b>Output Values Block:</b>
-* <b>Local Values Block:</b>
+* <b>Output Values Block:</b>  
+  
+* <b>Local Values Block:</b>  
+  
+
 #### ***<ins>3. Calling/Referencing Block</ins>***
 * <b>Data Sources Block:</b>
 * <b>Modules Block:</b>
