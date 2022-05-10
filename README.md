@@ -1,2 +1,0 @@
-# MasteringTerraform
-MasteringTerraform
